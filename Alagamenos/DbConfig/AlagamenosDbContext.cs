@@ -5,6 +5,7 @@ namespace Alagamenos.DbConfig;
 
 public class AlagamenosDbContext : DbContext
 {
+    public AlagamenosDbContext(DbContextOptions<AlagamenosDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -14,24 +15,22 @@ public class AlagamenosDbContext : DbContext
             .HasKey(ua => new { ua.UsuarioId, ua.AlertaId });
         
         modelBuilder.Entity<UsuarioAlerta>()
-            .HasOne(ua => ua.Usuario)
-            .WithMany(u => u.UsuarioAlertas)
-            .HasForeignKey(ua => ua.UsuarioId);
+            .HasOne(ua => ua.Alerta)
+            .WithMany() 
+            .HasForeignKey(ua => ua.AlertaId);
 
         modelBuilder.Entity<UsuarioAlerta>()
-            .HasOne(ua => ua.Alerta)
-            .WithMany(a => a.UsuarioAlertas)
-            .HasForeignKey(ua => ua.AlertaId);
+            .HasOne(ua => ua.Usuario)
+            .WithMany() 
+            .HasForeignKey(ua => ua.UsuarioId);
     }
-    public AlagamenosDbContext(DbContextOptions<AlagamenosDbContext> options) : base(options) { }
 
+    public DbSet<Usuario> Usuarios { get; set; }
     public DbSet<Alerta> Alertas { get; set; }
+    public DbSet<Rua> Ruas { get; set; }
     public DbSet<Bairro> Bairros { get; set; }
     public DbSet<Cidade> Cidades { get; set; }
-    public DbSet<Endereco> Enderecos { get; set; }
     public DbSet<Estado> Estados { get; set; }
-    public DbSet<Rua> Ruas { get; set; }
-    public DbSet<Usuario> Usuarios { get; set; }
+    public DbSet<Endereco> Enderecos { get; set; }
     public DbSet<UsuarioAlerta> UsuarioAlertas { get; set; }
-
 }

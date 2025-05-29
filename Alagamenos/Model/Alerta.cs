@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Alagamenos.Model;
 
-[Table("ALERTAS")]
+[Table("ALERTA")]
 [SwaggerSchema("Tabela que representa os alertas de alagamento")]
 public class Alerta : IBindableFromHttpContext<Alerta>
 {
@@ -45,8 +45,4 @@ public class Alerta : IBindableFromHttpContext<Alerta>
     [ForeignKey("RuaId")]
     [SwaggerSchema("Rua associada ao alerta", ReadOnly = true)]
     public Rua Rua { get; set; }
-
-    [SwaggerSchema("Lista de relações entre este alerta e os usuários que o receberam", ReadOnly = true)]
-    [JsonIgnore]
-    public ICollection<UsuarioAlerta> UsuarioAlertas { get; set; }
 }

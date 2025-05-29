@@ -1,0 +1,71 @@
+﻿using Alagamenos.DbConfig;
+using Alagamenos.Model;
+using Microsoft.EntityFrameworkCore;
+
+namespace Alagamenos.Controllers;
+
+public class EstadoEndpoints
+{
+    public static void Map(WebApplication app)
+    {
+
+        var group = app.MapGroup("/estados").WithTags("Estado");
+        
+        //Get all
+        group.MapGet("/", async (AlagamenosDbContext db) =>
+            await db.Estados.ToListAsync())
+            .WithSummary("Retorna todos os estados")
+            .WithDescription("Retorna todos os estados cadastrados no banco de dados, " +
+                             "mesmo que só seja encontrado um estado, ele ainda vai retornar uma lista");
+
+        //GetById
+        group.MapGet("/{id}", async (int id, AlagamenosDbContext db) =>
+        {
+            var estado = await db.Estados.FindAsync(id);
+            return estado is not null ? Results.Ok(estado) : Results.NotFound();
+        })
+        .WithSummary("Busca um estado pelo ID")
+        .WithDescription("Retorna os dados de um estado específico com base no ID informado. " +
+                         "Caso o ID não exista, retorna 404 Not Found.");
+        
+        // Inserir
+        group.MapPost("/inserir", async (Estado estado, AlagamenosDbContext db) =>
+            {
+                db.Estados.Add(estado);
+                await db.SaveChangesAsync();
+                return Results.Created($"/Estados/{estado.Id}", estado);
+            })
+            .WithSummary("Insere um novo estado")
+            .WithDescription("Adiciona um novo estado ao banco de dados com base nos dados enviados no corpo da requisição.");
+        
+        // Atualizar
+        group.MapPut("/atualizar/{id}", async (int id, Estado estado, AlagamenosDbContext db) =>
+        {
+            var existing = await db.Estados.FindAsync(id);
+            if (existing is null) return Results.NotFound();
+
+            existing.NomeEstado = estado.NomeEstado;
+            await db.SaveChangesAsync();
+
+            return Results.Ok($"Estado com ID {id} atualizado com sucesso.");
+        })
+        .WithSummary("Atualiza um estado existente")
+        .WithDescription("Atualiza os dados de um estado já cadastrado, identificado pelo ID. " +
+                         "Caso o ID não exista, retorna 404 Not Found.");
+        
+        // Deletar
+        group.MapDelete("/deletar/{id}", async (int id, AlagamenosDbContext db) =>
+            {
+                var estado = await db.Estados.FindAsync(id);
+                if (estado is null) return Results.NotFound();
+
+                db.Estados.Remove(estado);
+                await db.SaveChangesAsync();
+                
+                return Results.Ok($"Estado com ID {id} removido com sucesso.");
+            })
+        .WithSummary("Remove um estado")
+        .WithDescription("Remove um estado do banco de dados com base no ID informado. " +
+                         "Caso o estado não seja encontrado, retorna 404 Not Found.");
+    }
+}

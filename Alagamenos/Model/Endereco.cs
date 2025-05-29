@@ -34,7 +34,7 @@ public class Endereco : IBindableFromHttpContext<Endereco>
     
     [Column("COMPLEMENTO")]
     [SwaggerSchema("Complemento do endereço", ReadOnly = true)]
-    public string Complemento { get; set; }
+    public string? Complemento { get; set; }
 
     [Column("RUA_ID")]
     [SwaggerSchema("Identificador único da Rua em que se encontra o endereço", ReadOnly = true)]
@@ -42,7 +42,7 @@ public class Endereco : IBindableFromHttpContext<Endereco>
     
     [ForeignKey("RuaId")]
     [SwaggerSchema("Rua associada ao endereço", ReadOnly = true)]
-    public Rua rua { get; set; }
+    public Rua Rua { get; set; }
     
     [Column("USUARIO_ID")]
     [SwaggerSchema("Identificador único do Usuário associado ao endereço", ReadOnly = true)]
@@ -50,5 +50,5 @@ public class Endereco : IBindableFromHttpContext<Endereco>
     
     [ForeignKey("UsuarioId")]
     [SwaggerSchema("Rua associada ao endereço", ReadOnly = true)]
-    public Usuario usuario { get; set; }
+    public Usuario Usuario { get; set; }
 }

@@ -34,7 +34,7 @@ public class Rua : IBindableFromHttpContext<Rua>
     
     [Column("OBSERVACAO")]
     [SwaggerSchema("Observação referente a rua", ReadOnly = true)]
-    public string Observacao { get; set; }
+    public string? Observacao { get; set; }
     
     [Column("BAIRRO_ID")]
     [SwaggerSchema("Identificador único do bairro em que se encontra a rua", ReadOnly = true)]

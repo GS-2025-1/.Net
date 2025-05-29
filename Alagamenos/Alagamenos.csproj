@@ -21,4 +21,9 @@
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.1.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Controllers\UsuarioController.cs" />
+      <Compile Remove="Controllers\UsuarioAlertaController.cs" />
+    </ItemGroup>
+
 </Project>

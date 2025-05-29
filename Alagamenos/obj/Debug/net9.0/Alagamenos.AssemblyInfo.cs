@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Alagamenos")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+66dd38a571e5d5829210298ab13f4cdc56356208")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+993c3e905ed5fcad03908847772256f8c9a7a8db")]
 [assembly: System.Reflection.AssemblyProductAttribute("Alagamenos")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Alagamenos")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
