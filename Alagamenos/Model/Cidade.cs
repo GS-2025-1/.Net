@@ -1,13 +1,14 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Alagamenos.Model;
 
 [Table("CIDADE")]
+[SwaggerSchema("Tabela que representa as cidades de um estado")]
 public class Cidade : IBindableFromHttpContext<Cidade>
 {
     public static async ValueTask<Cidade?> BindAsync(HttpContext context, ParameterInfo parameter)
@@ -24,17 +25,18 @@ public class Cidade : IBindableFromHttpContext<Cidade>
     
     [Column("ID")]
     [Key]
-    [Description("Identificador único da cidade")]
+    [SwaggerSchema("Identificador único da cidade", ReadOnly = true)]
     public int Id { get; set; }
     
     [Column("NOME_CIDADE")]
-    [Description("Nome da cidade")]
+    [SwaggerSchema("Nome da cidade", ReadOnly = true)]
     public string NomeCidade { get; set; }
     
     [Column("ESTADO_ID")]
-    [Description("Identificador único do Estado em que se encontra a Cidade")]
+    [SwaggerSchema("Identificador único do estado em que se encontra a cidade", ReadOnly = true)]
     public int EstadoId { get; set; }
     
     [ForeignKey("EstadoId")]
+    [SwaggerSchema("Estado associado à cidade", ReadOnly = true)]
     public Estado Estado { get; set; }
 }

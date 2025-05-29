@@ -17,10 +17,8 @@
         </PackageReference>
         <PackageReference Include="NSwag.Core" Version="14.4.0" />
         <PackageReference Include="Oracle.EntityFrameworkCore" Version="9.23.80" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Controllers\" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.1.2" />
     </ItemGroup>
 
 </Project>

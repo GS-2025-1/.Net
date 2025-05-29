@@ -1,13 +1,15 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Alagamenos.Model;
 
 [Table("ALERTAS")]
+[SwaggerSchema("Tabela que representa os alertas de alagamento")]
 public class Alerta : IBindableFromHttpContext<Alerta>
 {
     public static async ValueTask<Alerta?> BindAsync(HttpContext context, ParameterInfo parameter)
@@ -21,25 +23,30 @@ public class Alerta : IBindableFromHttpContext<Alerta>
 
         return await context.Request.ReadFromJsonAsync<Alerta>();
     }
-    
-    [Column("ID")]
+
     [Key]
-    [Description("Identificador único do Alerta")]
+    [Column("ID")]
+    [SwaggerSchema("Identificador único do Alerta", ReadOnly = true)]
     public int Id { get; set; }
 
+    [Required]
     [Column("MENSAGEM")]
-    [Description("Mensagem do Alerta emitido")]
+    [SwaggerSchema("Mensagem do Alerta emitido")]
     public string Mensagem { get; set; }
 
     [Column("DATA_CRIACAO")]
-    [Description("Data e hora em que o alerta foi criado")]
+    [SwaggerSchema("Data e hora em que o alerta foi criado")]
     public DateTime DataCriacao { get; set; }
 
     [Column("RUA_ID")]
-    [Description("Identificador da rua onde o alerta foi registrado")]
+    [SwaggerSchema("Identificador da rua onde o alerta foi registrado")]
     public int RuaId { get; set; }
-    
-    [ForeignKey("RuaId")]
-    public Rua rua { get; set; }
 
+    [ForeignKey("RuaId")]
+    [SwaggerSchema("Rua associada ao alerta", ReadOnly = true)]
+    public Rua Rua { get; set; }
+
+    [SwaggerSchema("Lista de relações entre este alerta e os usuários que o receberam", ReadOnly = true)]
+    [JsonIgnore]
+    public ICollection<UsuarioAlerta> UsuarioAlertas { get; set; }
 }

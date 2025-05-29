@@ -31,9 +31,9 @@ public class Usuario : IBindableFromHttpContext<Usuario>
     [Description("Nome completo do Usuário")]
     public string Nome { get; set; }
 
-    [Column("DATA_DE_NASCIMENTO")]
+    [Column("DATA_NASCIMENTO")]
     [Description("Data de nascimento do Usuário")]
-    public DateTime DataDeNascimento { get; set; }
+    public DateTime DataNascimento { get; set; }
 
     [Column("TELEFONE")]
     [Description("Telefone de contato do Usuário")]
@@ -42,12 +42,10 @@ public class Usuario : IBindableFromHttpContext<Usuario>
     [Column("EMAIL")]
     [Description("Email do Usuário")]
     public string Email { get; set; }
-
-    [Column("NOME_DE_USUARIO")]
-    [Description("Login do Usuário")]
-    public string NomeDeUsuario { get; set; }
-
+    
     [Column("SENHA")]
     [Description("Senha do Usuário")]
     public string Senha { get; set; }
+    
+    public ICollection<UsuarioAlerta> UsuarioAlertas { get; set; }
 }

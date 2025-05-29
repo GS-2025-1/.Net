@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Alagamenos.Model;
 
 [Table("USUARIO_ALERTA")]
-public class Usuario_Alerta
+public class UsuarioAlerta
 {
     [Key, Column("USUARIO_ID", Order = 0)]
     [Description("FK para o Usuário que recebeu o alerta")]

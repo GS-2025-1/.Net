@@ -1,13 +1,14 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Alagamenos.Model;
 
 [Table("ESTADO")]
+[SwaggerSchema("Tabela que representa os estados do país")]
 public class Estado : IBindableFromHttpContext<Estado>
 {
     public static async ValueTask<Estado?> BindAsync(HttpContext context, ParameterInfo parameter)
@@ -24,11 +25,11 @@ public class Estado : IBindableFromHttpContext<Estado>
     
     [Column("ID")]
     [Key]
-    [Description("Identificador único de Estado")]
+    [SwaggerSchema("Identificador único de estado", ReadOnly = true)]
     public int Id { get; set; }
     
     [Column("NOME_ESTADO")]
-    [Description("Nome do estado")]
+    [SwaggerSchema("Nome do estado", ReadOnly = true)]
     public string NomeEstado { get; set; }
     
 }
