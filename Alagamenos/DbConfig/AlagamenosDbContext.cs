@@ -1,4 +1,5 @@
-﻿using Alagamenos.Model;
+﻿using Alagamenos.Dto;
+using Alagamenos.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alagamenos.DbConfig;

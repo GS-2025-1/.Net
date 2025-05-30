@@ -1,4 +1,5 @@
 ﻿using Alagamenos.DbConfig;
+using Alagamenos.Dto;
 using Alagamenos.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,8 +31,17 @@ public class UsuarioEndpoints
                          "Caso o ID não exista, retorna 404 Not Found.");
         
         // Inserir
-        group.MapPost("/inserir", async ([FromBody] Usuario usuario, [FromServices] AlagamenosDbContext db) =>
+        group.MapPost("/inserir", async ([FromBody] UsuarioDto usuarioDto, [FromServices] AlagamenosDbContext db) =>
             {
+                var usuario = new Usuario
+                {
+                    Nome = usuarioDto.Nome,
+                    DataNascimento = usuarioDto.DataNascimento,
+                    Telefone = usuarioDto.Telefone,
+                    Email = usuarioDto.Email,
+                    Senha = usuarioDto.Senha
+                };
+                
                 db.Usuarios.Add(usuario);
                 await db.SaveChangesAsync();
                 return Results.Created($"/Usuarios/{usuario.Id}", usuario);
@@ -40,16 +50,16 @@ public class UsuarioEndpoints
             .WithDescription("Adiciona um novo usuario ao banco de dados com base nos dados enviados no corpo da requisição.");
         
         // Atualizar
-        group.MapPut("/atualizar/{id}", async (int id, [FromBody] Usuario usuario, [FromServices] AlagamenosDbContext db) =>
+        group.MapPut("/atualizar/{id}", async (int id, [FromBody] UsuarioDto usuarioDto, [FromServices] AlagamenosDbContext db) =>
         {
             var existing = await db.Usuarios.FindAsync(id);
             if (existing is null) return Results.NotFound();
 
-            existing.Nome = usuario.Nome;
-            existing.Email = usuario.Email;
-            existing.DataNascimento = usuario.DataNascimento;
-            existing.Senha = usuario.Senha;
-            existing.Telefone = usuario.Telefone;
+            existing.Nome = usuarioDto.Nome;
+            existing.Email = usuarioDto.Email;
+            existing.DataNascimento = usuarioDto.DataNascimento;
+            existing.Senha = usuarioDto.Senha;
+            existing.Telefone = usuarioDto.Telefone;
             
             await db.SaveChangesAsync();
 

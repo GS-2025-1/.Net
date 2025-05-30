@@ -1,4 +1,5 @@
 ﻿using Alagamenos.DbConfig;
+using Alagamenos.Dto;
 using Alagamenos.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,8 +37,14 @@ public class BairroEndpoints
                          "Caso o ID não exista, retorna 404 Not Found.");
         
         // Inserir
-        group.MapPost("/inserir", async ([FromBody] Bairro bairro,[FromServices] AlagamenosDbContext db) =>
+        group.MapPost("/inserir", async ([FromBody] BairroDto bairroDto,[FromServices] AlagamenosDbContext db) =>
             {
+                var bairro = new Bairro
+                {
+                    NomeBairro = bairroDto.NomeBairro,
+                    CidadeId = bairroDto.CidadeId
+                };
+                
                 db.Bairros.Add(bairro);
                 await db.SaveChangesAsync();
                 return Results.Created($"/Bairros/{bairro.Id}", bairro);
@@ -46,12 +53,12 @@ public class BairroEndpoints
             .WithDescription("Adiciona um novo bairro ao banco de dados com base nos dados enviados no corpo da requisição.");
         
         // Atualizar
-        group.MapPut("/atualizar/{id}", async (int id, [FromBody] Bairro bairro, [FromServices] AlagamenosDbContext db) =>
+        group.MapPut("/atualizar/{id}", async (int id, [FromBody] BairroDto bairroDto, [FromServices] AlagamenosDbContext db) =>
         {
             var existing = await db.Bairros.FindAsync(id);
             if (existing is null) return Results.NotFound();
 
-            existing.NomeBairro = bairro.NomeBairro;
+            existing.NomeBairro = bairroDto.NomeBairro;
             await db.SaveChangesAsync();
 
             return Results.Ok($"Bairro com ID {id} atualizado com sucesso.");

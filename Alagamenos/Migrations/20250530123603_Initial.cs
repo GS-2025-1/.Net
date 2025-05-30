@@ -88,7 +88,7 @@ namespace Alagamenos.Migrations
                     ID = table.Column<int>(type: "NUMBER(10)", nullable: false)
                         .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
                     NOME_RUA = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
-                    OBSERVACAO = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
+                    OBSERVACAO = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true),
                     BAIRRO_ID = table.Column<int>(type: "NUMBER(10)", nullable: false)
                 },
                 constraints: table =>
@@ -130,7 +130,7 @@ namespace Alagamenos.Migrations
                     ID = table.Column<int>(type: "NUMBER(10)", nullable: false)
                         .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
                     NUMERO_ENDERECO = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
-                    COMPLEMENTO = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
+                    COMPLEMENTO = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true),
                     RUA_ID = table.Column<int>(type: "NUMBER(10)", nullable: false),
                     USUARIO_ID = table.Column<int>(type: "NUMBER(10)", nullable: false)
                 },

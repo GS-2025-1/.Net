@@ -7,10 +7,6 @@ namespace Alagamenos.Dto;
 public class RuaDto
 {
     [Required]
-    [SwaggerSchema("Identificador único da rua")]
-    public int Id { get; set; }
-    
-    [Required]
     [SwaggerSchema("Nome da rua")]
     public string NomeRua { get; set; }
     

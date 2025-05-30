@@ -7,10 +7,6 @@ namespace Alagamenos.Dto;
 public class CidadeDto
 {
     [Required]
-    [SwaggerSchema("Identificador único da cidade")]
-    public int Id { get; set; }
-    
-    [Required]
     [SwaggerSchema("Nome da cidade")]
     public string NomeCidade { get; set; }
     

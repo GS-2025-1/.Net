@@ -1,4 +1,5 @@
 ﻿using Alagamenos.DbConfig;
+using Alagamenos.Dto;
 using Alagamenos.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,8 +36,14 @@ public class CidadeEndpoints
                          "Caso o ID não exista, retorna 404 Not Found.");
         
         // Inserir
-        group.MapPost("/inserir", async ( [FromBody] Cidade cidade, [FromServices] AlagamenosDbContext db) =>
+        group.MapPost("/inserir", async ( [FromBody] CidadeDto cidadeDto, [FromServices] AlagamenosDbContext db) =>
             {
+                var cidade = new Cidade
+                {
+                    NomeCidade = cidadeDto.NomeCidade,
+                    EstadoId = cidadeDto.EstadoId
+                };
+                
                 db.Cidades.Add(cidade);
                 await db.SaveChangesAsync();
                 return Results.Created($"/Cidades/{cidade.Id}", cidade);
@@ -45,12 +52,12 @@ public class CidadeEndpoints
             .WithDescription("Adiciona uma nova cidade ao banco de dados com base nos dados enviados no corpo da requisição.");
         
         // Atualizar
-        group.MapPut("/atualizar/{id}", async (int id, [FromBody] Cidade cidade, [FromServices] AlagamenosDbContext db) =>
+        group.MapPut("/atualizar/{id}", async (int id, [FromBody] CidadeDto cidadeDto, [FromServices] AlagamenosDbContext db) =>
         {
             var existing = await db.Cidades.FindAsync(id);
             if (existing is null) return Results.NotFound();
 
-            existing.NomeCidade = cidade.NomeCidade;
+            existing.NomeCidade = cidadeDto.NomeCidade;
             await db.SaveChangesAsync();
 
             return Results.Ok($"Cidade com ID {id} atualizado com sucesso.");

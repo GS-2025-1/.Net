@@ -7,10 +7,6 @@ namespace Alagamenos.Dto;
 public class BairroDto
 {
     [Required]
-    [SwaggerSchema("Identificador único do bairro")]
-    public int Id { get; set; }
-    
-    [Required]
     [SwaggerSchema("Nome do bairro")]
     public string NomeBairro { get; set; }
     

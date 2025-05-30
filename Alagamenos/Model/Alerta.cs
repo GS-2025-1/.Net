@@ -30,15 +30,15 @@ public class Alerta : IBindableFromHttpContext<Alerta>
 
     [Required]
     [Column("MENSAGEM")]
-    [SwaggerSchema("Mensagem do Alerta emitido")]
+    [SwaggerSchema("Mensagem do Alerta emitido", ReadOnly = true)]
     public string Mensagem { get; set; }
 
     [Column("DATA_CRIACAO")]
-    [SwaggerSchema("Data e hora em que o alerta foi criado")]
+    [SwaggerSchema("Data e hora em que o alerta foi criado", ReadOnly = true)]
     public DateTime DataCriacao { get; set; }
 
     [Column("RUA_ID")]
-    [SwaggerSchema("Identificador da rua onde o alerta foi registrado")]
+    [SwaggerSchema("Identificador da rua onde o alerta foi registrado", ReadOnly = true)]
     public int RuaId { get; set; }
 
     [ForeignKey("RuaId")]

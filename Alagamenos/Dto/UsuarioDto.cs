@@ -8,10 +8,6 @@ namespace Alagamenos.Dto;
 public class UsuarioDto
 {
     [Required]
-    [SwaggerSchema("Identificador único do usuário", ReadOnly = true)]
-    public int Id { get; set; }
-
-    [Required]
     [SwaggerSchema("Nome completo do Usuário")]
     public string Nome { get; set; }
 

@@ -56,8 +56,16 @@ public class EnderecoEndpoints
                          "Caso o ID não exista, retorna 404 Not Found.");
         
         // Inserir
-        group.MapPost("/inserir", async ([FromBody] Endereco endereco, [FromServices] AlagamenosDbContext db) =>
+        group.MapPost("/inserir", async ([FromBody] EnderecoDto enderecoDto, [FromServices] AlagamenosDbContext db) =>
             {
+                var endereco = new Endereco
+                {
+                    NumeroEndereco = enderecoDto.NumeroEndereco,
+                    Complemento = enderecoDto.Complemento,
+                    RuaId = enderecoDto.RuaId,
+                    UsuarioId = enderecoDto.UsuarioId
+                };
+                
                 db.Enderecos.Add(endereco);
                 await db.SaveChangesAsync();
                 return Results.Created($"/Enderecos/{endereco.Id}", endereco);
@@ -67,14 +75,14 @@ public class EnderecoEndpoints
 
         
         // Atualizar
-        group.MapPut("/atualizar/{id}", async (int id, [FromBody] Endereco endereco, [FromServices] AlagamenosDbContext db) =>
+        group.MapPut("/atualizar/{id}", async (int id, [FromBody] EnderecoDto enderecoDto, [FromServices] AlagamenosDbContext db) =>
         {
             var existing = await db.Enderecos.FindAsync(id);
             if (existing is null) return Results.NotFound();
 
-            existing.NumeroEndereco = endereco.NumeroEndereco;
-            existing.Complemento = endereco.Complemento;
-            existing.RuaId = endereco.RuaId;
+            existing.NumeroEndereco = enderecoDto.NumeroEndereco;
+            existing.Complemento = enderecoDto.Complemento;
+            existing.RuaId = enderecoDto.RuaId;
             await db.SaveChangesAsync();
 
             return Results.Ok($"Endereco com ID {id} atualizado com sucesso.");

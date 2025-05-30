@@ -7,10 +7,6 @@ namespace Alagamenos.Dto;
 public class EnderecoDto
 {
     [Required]
-    [SwaggerSchema("Identificador único do endereco")]
-    public int Id { get; set; }
-    
-    [Required]
     [SwaggerSchema("Número do endereço")]
     public string NumeroEndereco { get; set; }
     

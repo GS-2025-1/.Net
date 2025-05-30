@@ -111,7 +111,6 @@ namespace Alagamenos.Migrations
                     OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Complemento")
-                        .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("COMPLEMENTO");
 
@@ -175,7 +174,6 @@ namespace Alagamenos.Migrations
                         .HasColumnName("NOME_RUA");
 
                     b.Property<string>("Observacao")
-                        .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)")
                         .HasColumnName("OBSERVACAO");
 
@@ -278,21 +276,21 @@ namespace Alagamenos.Migrations
 
             modelBuilder.Entity("Alagamenos.Model.Endereco", b =>
                 {
-                    b.HasOne("Alagamenos.Model.Rua", "rua")
+                    b.HasOne("Alagamenos.Model.Rua", "Rua")
                         .WithMany()
                         .HasForeignKey("RuaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Alagamenos.Model.Usuario", "usuario")
+                    b.HasOne("Alagamenos.Model.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("rua");
+                    b.Navigation("Rua");
 
-                    b.Navigation("usuario");
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Alagamenos.Model.Rua", b =>

@@ -7,10 +7,6 @@ namespace Alagamenos.Dto;
 public class EstadoDto
 {
     [Required]
-    [SwaggerSchema("Identificador único de estado")]
-    public int Id { get; set; }
-    
-    [Required]
     [SwaggerSchema("Nome do estado")]
     public string NomeEstado { get; set; }
 }

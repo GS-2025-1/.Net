@@ -1,4 +1,5 @@
 ﻿using Alagamenos.DbConfig;
+using Alagamenos.Dto;
 using Alagamenos.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,8 +31,13 @@ public class EstadoEndpoints
                          "Caso o ID não exista, retorna 404 Not Found.");
         
         // Inserir
-        group.MapPost("/inserir", async ([FromBody] Estado estado, [FromServices] AlagamenosDbContext db) =>
+        group.MapPost("/inserir", async ([FromBody] EstadoDto estadoDto, [FromServices] AlagamenosDbContext db) =>
             {
+                var estado = new Estado
+                {
+                    NomeEstado = estadoDto.NomeEstado
+                };
+                
                 db.Estados.Add(estado);
                 await db.SaveChangesAsync();
                 return Results.Created($"/Estados/{estado.Id}", estado);
@@ -40,12 +46,12 @@ public class EstadoEndpoints
             .WithDescription("Adiciona um novo estado ao banco de dados com base nos dados enviados no corpo da requisição.");
         
         // Atualizar
-        group.MapPut("/atualizar/{id}", async (int id, [FromBody] Estado estado, [FromServices] AlagamenosDbContext db) =>
+        group.MapPut("/atualizar/{id}", async (int id, [FromBody] EstadoDto estadoDto, [FromServices] AlagamenosDbContext db) =>
         {
             var existing = await db.Estados.FindAsync(id);
             if (existing is null) return Results.NotFound();
 
-            existing.NomeEstado = estado.NomeEstado;
+            existing.NomeEstado = estadoDto.NomeEstado;
             await db.SaveChangesAsync();
 
             return Results.Ok($"Estado com ID {id} atualizado com sucesso.");

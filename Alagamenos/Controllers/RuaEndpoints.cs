@@ -1,4 +1,5 @@
 ﻿using Alagamenos.DbConfig;
+using Alagamenos.Dto;
 using Alagamenos.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,8 +39,15 @@ public class RuaEndpoints
                          "Caso o ID não exista, retorna 404 Not Found.");
         
         // Inserir
-        group.MapPost("/inserir", async ([FromBody] Rua rua, [FromServices] AlagamenosDbContext db) =>
+        group.MapPost("/inserir", async ([FromBody] RuaDto ruaDto, [FromServices] AlagamenosDbContext db) =>
             {
+                var rua = new Rua
+                {
+                    NomeRua = ruaDto.NomeRua,
+                    BairroId = ruaDto.BairroId,
+                    Observacao = ruaDto.Observacao
+                };
+                
                 db.Ruas.Add(rua);
                 await db.SaveChangesAsync();
                 return Results.Created($"/Ruas/{rua.Id}", rua);
@@ -48,12 +56,12 @@ public class RuaEndpoints
             .WithDescription("Adiciona uma nova rua ao banco de dados com base nos dados enviados no corpo da requisição.");
         
         // Atualizar
-        group.MapPut("/atualizar/{id}", async (int id, [FromBody] Rua rua, [FromServices] AlagamenosDbContext db) =>
+        group.MapPut("/atualizar/{id}", async (int id, [FromBody] RuaDto ruaDto, [FromServices] AlagamenosDbContext db) =>
         {
             var existing = await db.Ruas.FindAsync(id);
             if (existing is null) return Results.NotFound();
 
-            existing.NomeRua = rua.NomeRua;
+            existing.NomeRua = ruaDto.NomeRua;
             await db.SaveChangesAsync();
 
             return Results.Ok($"Rua com ID {id} atualizado com sucesso.");

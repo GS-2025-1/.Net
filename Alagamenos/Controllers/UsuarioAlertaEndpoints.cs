@@ -56,8 +56,14 @@ public class UsuarioAlertaEndpoints
         .WithDescription("Retorna um vínculo da tabela de junção com base nos IDs do usuário e do alerta");
 
         // POST - criar vínculo
-        group.MapPost("/inserir", async ([FromBody] UsuarioAlerta usuarioAlerta, AlagamenosDbContext db) =>
-        {
+        group.MapPost("/inserir", async ([FromBody] UsuarioAlertaDto usuarioAlertaDto, AlagamenosDbContext db) =>
+            {
+                var usuarioAlerta = new UsuarioAlerta
+                {
+                    UsuarioId = usuarioAlertaDto.UsuarioId,
+                    AlertaId = usuarioAlertaDto.AlertaId
+                };
+            
             var existe = await db.UsuarioAlertas.AnyAsync(ua => 
                 ua.UsuarioId == usuarioAlerta.UsuarioId && ua.AlertaId == usuarioAlerta.AlertaId);
 

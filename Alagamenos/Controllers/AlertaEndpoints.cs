@@ -1,4 +1,5 @@
 ﻿using Alagamenos.DbConfig;
+using Alagamenos.Dto;
 using Alagamenos.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,31 +41,21 @@ public class AlertaEndpoints
                          "Caso o ID não exista, retorna 404 Not Found.");
         
         // Inserir
-        group.MapPost("/inserir", async ( [FromBody] Alerta alerta,[FromServices] AlagamenosDbContext db) =>
+        group.MapPost("/inserir", async ( [FromBody] AlertaDto alertaDto,[FromServices] AlagamenosDbContext db) =>
             {
+                var alerta = new Alerta
+                {
+                    Mensagem = alertaDto.Mensagem,
+                    DataCriacao = alertaDto.DataCriacao,
+                    RuaId = alertaDto.RuaId
+                };
+                
                 db.Alertas.Add(alerta);
                 await db.SaveChangesAsync();
                 return Results.Created($"/Alertas/{alerta.Id}", alerta);
             })
             .WithSummary("Insere um novo alerta")
             .WithDescription("Adiciona um novo alerta ao banco de dados com base nos dados enviados no corpo da requisição.");
-        
-        // Atualizar
-        group.MapPut("/atualizar/{id}", async (int id, [FromBody] Alerta alerta, [FromServices] AlagamenosDbContext db) =>
-        {
-            var existing = await db.Alertas.FindAsync(id);
-            if (existing is null) return Results.NotFound();
-
-            existing.Mensagem = alerta.Mensagem;
-            existing.DataCriacao = alerta.DataCriacao;
-            existing.RuaId = alerta.RuaId;
-            await db.SaveChangesAsync();
-
-            return Results.Ok($"Alerta com ID {id} atualizado com sucesso.");
-        })
-        .WithSummary("Atualiza um alerta existente")
-        .WithDescription("Atualiza os dados de um alerta já cadastrado, identificado pelo ID. " +
-                         "Caso o ID não exista, retorna 404 Not Found.");
         
         // Deletar
         group.MapDelete("/deletar/{id}", async (int id, AlagamenosDbContext db) =>
