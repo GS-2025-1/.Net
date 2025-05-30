@@ -50,6 +50,7 @@ Alagamenos.Controllers.CidadeEndpoints.Map(app);
 Alagamenos.Controllers.EnderecoEndpoints.Map(app);
 Alagamenos.Controllers.EstadoEndpoints.Map(app);
 Alagamenos.Controllers.RuaEndpoints.Map(app);
+Alagamenos.Controllers.UsuarioEndpoints.Map(app);
 Alagamenos.Controllers.UsuarioAlertaEndpoints.Map(app);
 
 app.Run();

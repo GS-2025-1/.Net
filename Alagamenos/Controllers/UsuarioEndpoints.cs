@@ -1,5 +1,6 @@
 ﻿using Alagamenos.DbConfig;
 using Alagamenos.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alagamenos.Controllers;
@@ -29,7 +30,7 @@ public class UsuarioEndpoints
                          "Caso o ID não exista, retorna 404 Not Found.");
         
         // Inserir
-        group.MapPost("/inserir", async (Usuario usuario, AlagamenosDbContext db) =>
+        group.MapPost("/inserir", async ([FromBody] Usuario usuario, [FromServices] AlagamenosDbContext db) =>
             {
                 db.Usuarios.Add(usuario);
                 await db.SaveChangesAsync();
@@ -39,7 +40,7 @@ public class UsuarioEndpoints
             .WithDescription("Adiciona um novo usuario ao banco de dados com base nos dados enviados no corpo da requisição.");
         
         // Atualizar
-        group.MapPut("/atualizar/{id}", async (int id, Usuario usuario, AlagamenosDbContext db) =>
+        group.MapPut("/atualizar/{id}", async (int id, [FromBody] Usuario usuario, [FromServices] AlagamenosDbContext db) =>
         {
             var existing = await db.Usuarios.FindAsync(id);
             if (existing is null) return Results.NotFound();

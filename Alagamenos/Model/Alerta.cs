@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Alagamenos.Model;

@@ -1,5 +1,6 @@
 ﻿using Alagamenos.DbConfig;
 using Alagamenos.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alagamenos.Controllers;
@@ -34,7 +35,7 @@ public class CidadeEndpoints
                          "Caso o ID não exista, retorna 404 Not Found.");
         
         // Inserir
-        group.MapPost("/inserir", async (Cidade cidade, AlagamenosDbContext db) =>
+        group.MapPost("/inserir", async ( [FromBody] Cidade cidade, [FromServices] AlagamenosDbContext db) =>
             {
                 db.Cidades.Add(cidade);
                 await db.SaveChangesAsync();
@@ -44,7 +45,7 @@ public class CidadeEndpoints
             .WithDescription("Adiciona uma nova cidade ao banco de dados com base nos dados enviados no corpo da requisição.");
         
         // Atualizar
-        group.MapPut("/atualizar/{id}", async (int id, Cidade cidade, AlagamenosDbContext db) =>
+        group.MapPut("/atualizar/{id}", async (int id, [FromBody] Cidade cidade, [FromServices] AlagamenosDbContext db) =>
         {
             var existing = await db.Cidades.FindAsync(id);
             if (existing is null) return Results.NotFound();

@@ -1,5 +1,6 @@
 ﻿using Alagamenos.DbConfig;
 using Alagamenos.Model;
+using Alagamenos.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +21,28 @@ public class UsuarioAlertaEndpoints
             .WithSummary("Retorna todos os vínculos entre Usuários e Alertas")
             .WithDescription("Lista todos os registros da relação N:N entre Usuário e Alerta");
 
-        // GET by composite key
+        // GET all paginado
+        group.MapGet("/paginadas", async (int? page, AlagamenosDbContext db) =>
+            {
+                var pageSize = 10;
+                var currentPage = page ?? 1;
+                var skipItems = (currentPage - 1) * pageSize;
+
+                var totalItems = await db.UsuarioAlertas.CountAsync();
+                var data = await db.UsuarioAlertas
+                    .Include(ua => ua.Usuario)
+                    .Include(ua => ua.Alerta)
+                    .Skip(skipItems)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return Results.Ok(new SearchDto<UsuarioAlerta>(null, currentPage, totalItems, data));
+            })
+            .WithSummary("Retorna alertas de usuários paginados")
+            .WithDescription("Retorna todos os registros de endereços paginados. " +
+                             "Cada página retorna um número fixo de aletas de usuários (10 por página neste exemplo).");
+        
+        // GET com chave composta
         group.MapGet("/usuario/{usuarioId:int}/alerta/{alertaId:int}", async (int usuarioId, int alertaId, AlagamenosDbContext db) =>
         {
             var vinculo = await db.UsuarioAlertas

@@ -1,5 +1,7 @@
 ﻿using Alagamenos.DbConfig;
 using Alagamenos.Model;
+using Alagamenos.Dto;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alagamenos.Controllers;
@@ -20,6 +22,25 @@ public class EnderecoEndpoints
             .WithSummary("Retorna todos os enderecos")
             .WithDescription("Retorna todos os endereco cadastrados no banco de dados, " +
                              "mesmo que só seja encontrado um endereco, ele ainda vai retornar uma lista");
+        
+        //Get all paginado
+        group.MapGet("/paginadas", async (int? page, AlagamenosDbContext db) =>
+            {
+                var pageSize = 10;
+                var currentPage = page ?? 1;
+                var skipItems = (currentPage - 1) * pageSize;
+
+                var totalItems = await db.Enderecos.CountAsync();
+                var data = await db.Enderecos
+                    .Skip(skipItems)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return Results.Ok(new SearchDto<Endereco>(null, currentPage, totalItems, data));
+            })
+            .WithSummary("Retorna endereços paginadas")
+            .WithDescription("Retorna todos os registros de endereços paginados. " +
+                             "Cada página retorna um número fixo de registros (10 por página neste exemplo).");
 
         //GetById
         group.MapGet("/{id}", async (int id, AlagamenosDbContext db) =>
@@ -35,7 +56,7 @@ public class EnderecoEndpoints
                          "Caso o ID não exista, retorna 404 Not Found.");
         
         // Inserir
-        group.MapPost("/inserir", async (Endereco endereco, AlagamenosDbContext db) =>
+        group.MapPost("/inserir", async ([FromBody] Endereco endereco, [FromServices] AlagamenosDbContext db) =>
             {
                 db.Enderecos.Add(endereco);
                 await db.SaveChangesAsync();
@@ -43,9 +64,10 @@ public class EnderecoEndpoints
             })
             .WithSummary("Insere um novo endereco")
             .WithDescription("Adiciona um novo endereco ao banco de dados com base nos dados enviados no corpo da requisição.");
+
         
         // Atualizar
-        group.MapPut("/atualizar/{id}", async (int id, Endereco endereco, AlagamenosDbContext db) =>
+        group.MapPut("/atualizar/{id}", async (int id, [FromBody] Endereco endereco, [FromServices] AlagamenosDbContext db) =>
         {
             var existing = await db.Enderecos.FindAsync(id);
             if (existing is null) return Results.NotFound();

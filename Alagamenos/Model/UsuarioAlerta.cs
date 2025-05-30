@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Alagamenos.Model;
 
@@ -8,11 +8,11 @@ namespace Alagamenos.Model;
 public class UsuarioAlerta
 {
     [Key, Column("USUARIO_ID", Order = 0)]
-    [Description("FK para o Usuário que recebeu o alerta")]
+    [SwaggerSchema("FK para o Usuário que recebeu o alerta", ReadOnly = true)]
     public int UsuarioId { get; set; }
 
     [Key, Column("ALERTA_ID", Order = 1)]
-    [Description("FK para o Alerta que foi recebido")]
+    [SwaggerSchema("FK para o Alerta que foi recebido", ReadOnly = true)]
     public int AlertaId { get; set; }
 
     [ForeignKey("UsuarioId")]

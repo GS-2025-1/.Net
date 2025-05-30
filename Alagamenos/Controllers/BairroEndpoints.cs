@@ -1,5 +1,6 @@
 ﻿using Alagamenos.DbConfig;
 using Alagamenos.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Alagamenos.Controllers;
@@ -15,6 +16,7 @@ public class BairroEndpoints
         group.MapGet("/", async (AlagamenosDbContext db) =>
             await db.Bairros
                 .Include(b => b.Cidade)
+                .ThenInclude(c => c.Estado)
                 .ToListAsync())
             .WithSummary("Retorna todos os bairros")
             .WithDescription("Retorna todos os bairros cadastrados no banco de dados, " +
@@ -25,6 +27,7 @@ public class BairroEndpoints
         {
             var bairro = await db.Bairros
                 .Include(b => b.Cidade)
+                .ThenInclude(c => c.Estado)
                 .FirstOrDefaultAsync(b => b.Id == id);
             return bairro is not null ? Results.Ok(bairro) : Results.NotFound();
         })
@@ -33,7 +36,7 @@ public class BairroEndpoints
                          "Caso o ID não exista, retorna 404 Not Found.");
         
         // Inserir
-        group.MapPost("/inserir", async (Bairro bairro, AlagamenosDbContext db) =>
+        group.MapPost("/inserir", async ([FromBody] Bairro bairro,[FromServices] AlagamenosDbContext db) =>
             {
                 db.Bairros.Add(bairro);
                 await db.SaveChangesAsync();
@@ -43,7 +46,7 @@ public class BairroEndpoints
             .WithDescription("Adiciona um novo bairro ao banco de dados com base nos dados enviados no corpo da requisição.");
         
         // Atualizar
-        group.MapPut("/atualizar/{id}", async (int id, Bairro bairro, AlagamenosDbContext db) =>
+        group.MapPut("/atualizar/{id}", async (int id, [FromBody] Bairro bairro, [FromServices] AlagamenosDbContext db) =>
         {
             var existing = await db.Bairros.FindAsync(id);
             if (existing is null) return Results.NotFound();
