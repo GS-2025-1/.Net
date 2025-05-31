@@ -24,7 +24,7 @@ public class UsuarioAlertaEndpoints
         // GET all paginado
         group.MapGet("/paginadas", async (int? page, AlagamenosDbContext db) =>
             {
-                var pageSize = 10;
+                var pageSize = 5;
                 var currentPage = page ?? 1;
                 var skipItems = (currentPage - 1) * pageSize;
 

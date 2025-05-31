@@ -19,6 +19,25 @@ public class EstadoEndpoints
             .WithSummary("Retorna todos os estados")
             .WithDescription("Retorna todos os estados cadastrados no banco de dados, " +
                              "mesmo que só seja encontrado um estado, ele ainda vai retornar uma lista");
+        
+        //Get all paginado
+        group.MapGet("/paginadas", async (int? page, AlagamenosDbContext db) =>
+            {
+                var pageSize = 5;
+                var currentPage = page ?? 1;
+                var skipItems = (currentPage - 1) * pageSize;
+
+                var totalItems = await db.Estados.CountAsync();
+                var data = await db.Estados
+                    .Skip(skipItems)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return Results.Ok(new SearchDto<Estado>(null, currentPage, totalItems, data));
+            })
+            .WithSummary("Retorna endereços paginadas")
+            .WithDescription("Retorna todos os registros de estados paginados. " +
+                             "Cada página retorna um número fixo de registros (5 por página neste exemplo).");
 
         //GetById
         group.MapGet("/{id}", async (int id, AlagamenosDbContext db) =>

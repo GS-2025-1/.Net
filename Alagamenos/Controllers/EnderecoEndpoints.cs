@@ -26,7 +26,7 @@ public class EnderecoEndpoints
         //Get all paginado
         group.MapGet("/paginadas", async (int? page, AlagamenosDbContext db) =>
             {
-                var pageSize = 10;
+                var pageSize = 5;
                 var currentPage = page ?? 1;
                 var skipItems = (currentPage - 1) * pageSize;
 
@@ -40,7 +40,7 @@ public class EnderecoEndpoints
             })
             .WithSummary("Retorna endereços paginadas")
             .WithDescription("Retorna todos os registros de endereços paginados. " +
-                             "Cada página retorna um número fixo de registros (10 por página neste exemplo).");
+                             "Cada página retorna um número fixo de registros (5 por página neste exemplo).");
 
         //GetById
         group.MapGet("/{id}", async (int id, AlagamenosDbContext db) =>

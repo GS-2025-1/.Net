@@ -20,6 +20,25 @@ public class UsuarioEndpoints
             .WithDescription("Retorna todos os usuarios cadastrados no banco de dados, " +
                              "mesmo que só seja encontrado um usuario, ele ainda vai retornar uma lista");
 
+        //Get all paginado
+        group.MapGet("/paginadas", async (int? page, AlagamenosDbContext db) =>
+            {
+                var pageSize = 5;
+                var currentPage = page ?? 1;
+                var skipItems = (currentPage - 1) * pageSize;
+
+                var totalItems = await db.Usuarios.CountAsync();
+                var data = await db.Usuarios
+                    .Skip(skipItems)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return Results.Ok(new SearchDto<Usuario>(null, currentPage, totalItems, data));
+            })
+            .WithSummary("Retorna usuarios paginadas")
+            .WithDescription("Retorna todos os registros de usuarios paginados. " +
+                             "Cada página retorna um número fixo de usuarios (5 por página neste exemplo).");
+        
         //GetById
         group.MapGet("/{id}", async (int id, AlagamenosDbContext db) =>
         {
@@ -29,6 +48,26 @@ public class UsuarioEndpoints
         .WithSummary("Busca um usuario pelo ID")
         .WithDescription("Retorna os dados de um usuario específico com base no ID informado. " +
                          "Caso o ID não exista, retorna 404 Not Found.");
+        
+        //GetByEmail
+        group.MapGet("/email/{email}", async (string email, AlagamenosDbContext db) =>
+            {
+                var usuario = await db.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+                return usuario is not null ? Results.Ok(usuario) : Results.NotFound();
+            })
+            .WithSummary("Busca um usuario pelo Email")
+            .WithDescription("Retorna os dados de um usuario específico com base no email informado. " +
+                             "Caso o email não exista, retorna 404 Not Found.");
+        
+        //GetByTelefone
+        group.MapGet("/telefone/{telefone}", async (string telefone, AlagamenosDbContext db) =>
+            {
+                var usuario = await db.Usuarios.FirstOrDefaultAsync(u => u.Telefone == telefone);
+                return usuario is not null ? Results.Ok(usuario) : Results.NotFound();
+            })
+            .WithSummary("Busca um usuario pelo Email")
+            .WithDescription("Retorna os dados de um usuario específico com base no telefone informado. " +
+                             "Caso o telefone não exista, retorna 404 Not Found.");
         
         // Inserir
         group.MapPost("/inserir", async ([FromBody] UsuarioDto usuarioDto, [FromServices] AlagamenosDbContext db) =>

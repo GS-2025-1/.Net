@@ -22,6 +22,26 @@ public class CidadeEndpoints
             .WithDescription("Retorna todos as cidades cadastrados no banco de dados, " +
                              "mesmo que só seja encontrado uma cidade, ele ainda vai retornar uma lista");
 
+        // GET all paginado
+        group.MapGet("/paginadas", async (int? page, AlagamenosDbContext db) =>
+            {
+                var pageSize = 5;
+                var currentPage = page ?? 1;
+                var skipItems = (currentPage - 1) * pageSize;
+
+                var totalItems = await db.Cidades.CountAsync();
+                var data = await db.Cidades
+                    .Include(c => c.Estado)
+                    .Skip(skipItems)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return Results.Ok(new SearchDto<Cidade>(null, currentPage, totalItems, data));
+            })
+            .WithSummary("Retorna alertas de cidades paginados")
+            .WithDescription("Retorna todos os registros de cidades paginados. " +
+                             "Cada página retorna um número fixo de cidades (5 por página neste exemplo).");
+        
         //GetById
         group.MapGet("/{id}", async (int id, AlagamenosDbContext db) =>
         {

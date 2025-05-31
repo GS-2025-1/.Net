@@ -24,6 +24,28 @@ public class RuaEndpoints
             .WithDescription("Retorna todos as ruas cadastradas no banco de dados, " +
                              "mesmo que só seja encontrado uma rua, ele ainda vai retornar uma lista");
 
+        // GET all paginado
+        group.MapGet("/paginadas", async (int? page, AlagamenosDbContext db) =>
+            {
+                var pageSize = 5;
+                var currentPage = page ?? 1;
+                var skipItems = (currentPage - 1) * pageSize;
+
+                var totalItems = await db.Ruas.CountAsync();
+                var data = await db.Ruas
+                    .Include(r => r.Bairro)
+                    .ThenInclude(b => b.Cidade)
+                    .ThenInclude(c => c.Estado)
+                    .Skip(skipItems)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return Results.Ok(new SearchDto<Rua>(null, currentPage, totalItems, data));
+            })
+            .WithSummary("Retorna alertas de ruas paginados")
+            .WithDescription("Retorna todos os registros de ruas paginados. " +
+                             "Cada página retorna um número fixo de ruas (5 por página neste exemplo).");
+        
         //GetById
         group.MapGet("/{id}", async (int id, AlagamenosDbContext db) =>
         {
