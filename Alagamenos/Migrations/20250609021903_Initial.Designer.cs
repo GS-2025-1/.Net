@@ -12,7 +12,7 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace Alagamenos.Migrations
 {
     [DbContext(typeof(AlagamenosDbContext))]
-    [Migration("20250530123603_Initial")]
+    [Migration("20250609021903_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

@@ -26,4 +26,8 @@
       <Compile Remove="Controllers\UsuarioAlertaController.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Migrations\" />
+    </ItemGroup>
+
 </Project>
