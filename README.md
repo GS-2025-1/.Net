@@ -33,7 +33,7 @@ Certifique-se de ter instalado:
 1. Clone ou extraia o repositório:
 
 ```bash
-git clone https://github.com/Challenge-MottuGJM/dotnet.git
+git clone https://github.com/GS-2025-1/.Net.git
 cd Alagamenos
 ```
 
